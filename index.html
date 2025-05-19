@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Lady Cookie</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #B19CD9;  /* 星空紫 */
+            --accent-color: #FFB7C5;    /* 樱粉色 */
+            --bg-color: #0A1931;        /* 夜空蓝 */
+            --control-bg: rgba(17, 25, 40, 0.95);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0A1931 0%, #1A1A2E 100%);
+            color: #E6EDF3;
+            line-height: 1.8;
+            overflow-x: hidden;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 0 30px;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 1s ease-out 0.3s forwards;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            position: relative;
+            text-shadow: 0 0 15px rgba(177, 156, 217, 0.4);
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-color) 50%, transparent);
+        }
+
+        .timeline {
+            position: relative;
+            padding: 60px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, 
+                var(--primary-color) 0%, 
+                var(--accent-color) 100%);
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px rgba(177, 156, 217, 0.3);
+        }
+
+        .event {
+            position: relative;
+            width: 46%;
+            padding: 25px;
+            margin-bottom: 80px;
+            background: rgba(17, 25, 40, 0.9);
+            border-radius: 16px;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            will-change: transform, opacity;
+            border: 1px solid rgba(177, 156, 217, 0.2);
+        }
+
+        .event:nth-child(odd) {
+            left: 4%;
+            transform: translateX(-30px);
+        }
+
+        .event:nth-child(even) {
+            left: 54%;
+            transform: translateX(30px);
+        }
+
+        .event.active {
+            opacity: 1 !important;
+            transform: translateX(0) !important;
+        }
+
+        .event:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 16px 40px rgba(177, 156, 217, 0.2);
+        }
+
+        .event::after {
+            content: '';
+            position: absolute;
+            top: 26px;
+            width: 24px;
+            height: 24px;
+            background: var(--bg-color);
+            border: 3px solid var(--primary-color);
+            border-radius: 50%;
+            box-shadow: 0 0 12px rgba(177, 156, 217, 0.3);
+        }
+
+        .event:nth-child(odd)::after {
+            right: -34px;
+        }
+
+        .event:nth-child(even)::after {
+            left: -34px;
+        }
+
+        .date {
+            color: var(--primary-color);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .date::before {
+            content: '✦';
+            margin-right: 12px;
+            color: var(--accent-color);
+            font-size: 1.2em;
+            text-shadow: 0 0 8px rgba(255, 183, 197, 0.4);
+        }
+
+        .content {
+            color: #D1D9E6;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .detail {
+            max-height: 0;
+            overflow: hidden;
+            transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .detail.active {
+            max-height: 2000px;
+        }
+
+        .photo-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            margin: 20px 0;
+        }
+
+        .photo-placeholder {
+            background: #131D2F;
+            padding-top: 100%;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            cursor: zoom-in;
+            transition: transform 0.3s;
+            background-size: cover;
+            background-position: center;
+            border: 2px solid rgba(177, 156, 217, 0.2);
+        }
+
+        .control-panel {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            display: flex;
+            gap: 16px;
+            z-index: 999;
+        }
+
+        .music-player {
+            background: var(--control-bg);
+            padding: 12px 20px;
+            border-radius: 32px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: 0.3s;
+        }
+
+        .music-control {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), #9F86C0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(177, 156, 217, 0.3);
+        }
+
+        .music-control:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 16px rgba(177, 156, 217, 0.3);
+        }
+
+        .zoom-control {
+            background: var(--control-bg);
+            padding: 8px 16px;
+            border-radius: 32px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 120px;
+            height: 4px;
+            background: #2D3850;
+            border-radius: 2px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--primary-color), #9F86C0);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.95em;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(177, 156, 217, 0.3);
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 20px;
+                margin: 40px auto;
+            }
+            .event {
+                width: 88%;
+                left: 6% !important;
+            }
+            .control-panel {
+                bottom: 16px;
+                left: 16px;
+                gap: 12px;
+                flex-direction: column;
+            }
+            .music-player {
+                padding: 10px 16px;
+            }
+            input[type="range"] {
+                width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+
+    <div class="control-panel">
+        <div class="music-player">
+            <div class="music-control" onclick="toggleMusic()">▶</div>
+            <audio id="bg-music" loop>
+                <source src="audio/街道办 欧阳耀莹 - 春娇与志明.mp3" type="audio/mpeg">
+            </audio>
+        </div>
+        <div class="zoom-control">
+            <input type="range" min="0.5" max="1.5" step="0.1" value="1" oninput="zoomTimeline(this.value)">
+            <button onclick="resetZoom()">重置缩放</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>我们的物语</h1>
+            <p>点击星星，点亮回忆</p>
+        </div>
+        
+        <div class="timeline">
+            <div class="event">
+                <div class="date">2025年4月16日</div>
+                <div class="content">初次相遇</div>
+                <div class="detail">
+                    <div class="photo-container">
+                        <a href="images/4.16.jpg" data-lightbox="memories" data-title="星夜初遇">
+                            <div class="photo-placeholder" style="background-image: url(images/4.16.jpg)"></div>
+                        </a>
+                    </div>
+                    <p class="story">非常巧的遇见你，没有架子的你很让人产生好感...</p>
+                </div>
+            </div>
+
+            <div class="event">
+                <div class="date">2025年4月20日</div>
+                <div class="content">第一次一起吃饭</div>
+                <div class="detail">
+                    <div class="photo-container">
+                        <a href="images/4.20.jpg" data-lightbox="memories" data-title="第一次约会">
+                            <div class="photo-placeholder" style="background-image: url(images/4.20.jpg)"></div>
+                        </a>
+                    </div>
+                    <p class="story">第一次在一块儿吃饭，人群中我一眼就看到了你，有些后悔那天穿的太傻。后来去喝了一点鸡尾酒，你酒量不好，以后不会让你喝太多啦！</p>
+                </div>
+            </div>
+
+            <div class="event">
+                <div class="date">2025年4月25日</div>
+                <div class="content">第一次一起自习</div>
+                <div class="detail">
+                    <div class="photo-container">
+                        <a href="images/4.25.jpg" data-lightbox="memories" data-title="第一次自习">
+                            <div class="photo-placeholder" style="background-image: url(images/4.25.jpg)"></div>
+                        </a>
+                    </div>
+                    <p class="story">第一次在学活，很开心可以和你一起学习，我的眼里不再只有书本，还有蹦蹦跳跳的你。你在我的书上画了很多可爱的简笔画，我会一直珍藏的！</p>
+                </div>
+            </div>
+
+            <div class="event">
+                <div class="date">2025年4月27日</div>
+                <div class="content">第一次一起听歌</div>
+                <div class="detail">
+                    <div class="photo-container">
+                        <a href="images/4.27.jpg" data-lightbox="memories" data-title="第一次一起听歌">
+                            <div class="photo-placeholder" style="background-image: url(images/4.27.jpg)"></div>
+                        </a>
+                    </div>
+                    <p class="story">在深夜我们拿起耳机，在这一刻我好像有种错觉，似乎你就在我身边。虽身在别处但耳机里却播放着相同的歌，我喜欢这样的美好</p>
+                </div>
+            </div>
+            
+            <div class="event">
+                <div class="date">2025年5月1日</div>
+                <div class="content">一起玩游戏</div>
+                <div class="detail">
+                    <div class="photo-container">
+                        <a href="images/5.1.jpg" data-lightbox="memories" data-title="一起玩游戏">
+                            <div class="photo-placeholder" style="background-image: url(images/5.1.jpg)"></div>
+                        </a>
+                    </div>
+                    <p class="story">我把电脑给你，我们在学活一起玩双人成行，那时候你笨笨的，感觉后面就会变成游戏高手啦！走的时候你摸了一下我的头，很开心！</p>
+                </div>
+            </div>
+
+            <div class="event">
+                <div class="date">2025年5月4日</div>
+                <div class="content">第一次出去玩</div>
+                <div class="detail">
+                    <div class="photo-container">
+                        <a href="images/5.4.jpg" data-lightbox="memories" data-title="一起划船">
+                            <div class="photo-placeholder" style="background-image: url(images/5.4.jpg)"></div>
+                        </a>
+                    </div>
+                    <p class="story">第一次一起出去玩，在北海我们划船，看风景，我们聊天说地，微风下波动的，其实不只是北海的湖面。</p>
+                </div>
+            </div>
+
+            <div class="event">
+                <div class="date">2025年5月5日</div>
+                <div class="content">第一次在学校的咖啡馆</div>
+                <div class="detail">
+                    <div class="photo-container">
+                        <a href="images/5.5.jpg" data-lightbox="memories" data-title="一起在咖啡馆">
+                            <div class="photo-placeholder" style="background-image: url(images/5.5.jpg)"></div>
+                        </a>
+                    </div>
+                    <p class="story">我们第一次去学校咖啡馆，吵吵闹闹的玩着胡闹厨房，回去的路上我鼓足勇气，签上了你的手，临别时我们轻拥，我想我会一直记得这一天</p>
+                </div>
+            </div>
+
+            <div class="event">
+                <div class="date">2025年5月7日</div>
+                <div class="content">无法抑制但草率的表露心意</div>
+                <div class="detail">
+                    <div class="photo-container">
+                        <a href="images/5.7.jpg" data-lightbox="memories" data-title="一起在咖啡馆">
+                            <div class="photo-placeholder" style="background-image: url(images/5.7.jpg)"></div>
+                        </a>
+                    </div>
+                    <p class="story">我们坐在明湖边上，也许是氛围，又或者是我压抑不了的情绪，我略带草率的表白，带你去买了花，或许这时算我们的开始，但我也下定决心，我的表白不止这样，我要给你最完整的表白</p>
+                </div>
+            </div>
+
+            <div class="event">
+                <div class="date">2025年5月15日</div>
+                <div class="content">第一次一起看电影</div>
+                <div class="detail">
+                    <div class="photo-container">
+                        <a href="images/5.15.jpg" data-lightbox="memories" data-title="一起在电影院">
+                            <div class="photo-placeholder" style="background-image: url(images/5.15.jpg)"></div>
+                        </a>
+                    </div>
+                    <p class="story">第一次一起去看电影！电影没有想象的那么好看，但是和你在一起就会很开心，未来也要一起看！</p>
+                </div>
+            </div>
+            
+            <div class="event">
+                <div class="date">2025年5月17日</div>
+                <div class="content">见证一场求婚</div>
+                <div class="detail">
+                    <div class="photo-container">
+                        <a href="images/5.17.jpg" data-lightbox="memories" data-title="见证求婚">
+                            <div class="photo-placeholder" style="background-image: url(images/5.17.jpg)"></div>
+                        </a>
+                    </div>
+                    <p class="story">第一次去了学校的西餐厅，你穿裙子真的很好看！异形真的不适合吃饭的时候看，在港茶坐了一会儿，非常幸运看到了学长在求婚，我想未来如果有机会的话我会做到更好的！</p>
+                </div>
+            </div> 
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 星空粒子效果
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: 200 },
+                    color: { value: '#FFFFFF' },
+                    size: { value: 2, random: true },
+                    move: {
+                        enable: true,
+                        speed: 0.3,
+                        direction: "none",
+                        out_mode: "out"
+                    }
+                },
+                interactivity: {
+                    events: {
+                        onhover: {
+                            enable: true,
+                            mode: "bubble",
+                            parallax: { enable: false }
+                        }
+                    }
+                }
+            });
+
+            // 卡片动画
+            const events = document.querySelectorAll('.event');
+            const checkScroll = () => {
+                events.forEach(event => {
+                    const rect = event.getBoundingClientRect();
+                    if (rect.top < window.innerHeight * 0.85) {
+                        event.classList.add('active');
+                    }
+                });
+            };
+
+            events.forEach(event => {
+                event.addEventListener('click', () => {
+                    const detail = event.querySelector('.detail');
+                    detail.classList.toggle('active');
+                    event.style.zIndex = detail.classList.contains('active') ? 2 : 1;
+                });
+            });
+
+            window.addEventListener('scroll', checkScroll);
+            checkScroll();
+        });
+
+        // 音乐控制
+        function toggleMusic() {
+            const music = document.getElementById('bg-music');
+            const control = document.querySelector('.music-control');
+            music.paused ? music.play() : music.pause();
+            control.style.background = music.paused 
+                ? 'linear-gradient(135deg, var(--primary-color), #9F86C0)' 
+                : 'linear-gradient(135deg, #FFB7C5, #FF9AAE)';
+            control.textContent = music.paused ? '▶' : '⏸';
+        }
+
+        // 时间线缩放
+        function zoomTimeline(scale) {
+            document.querySelector('.container').style.transform = `scale(${scale})`;
+        }
+
+        function resetZoom() {
+            document.querySelector('.container').style.transform = 'scale(1)';
+            document.querySelector('.zoom-control input').value = 1;
+        }
+
+        // Lightbox配置
+        lightbox.option({
+            'resizeDuration': 220,
+            'wrapAround': true,
+            'albumLabel': "第 %1 张 / 共 %2 张"
+        });
+    </script>
+</body>
+</html>

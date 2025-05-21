@@ -8,10 +8,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #B19CD9;  /* 星空紫 */
-            --accent-color: #FFB7C5;    /* 樱粉色 */
-            --bg-color: #0A1931;        /* 夜空蓝 */
-            --control-bg: rgba(17, 25, 40, 0.95);
+            --primary-color: #88C9B1;  /* 薄荷绿 */
+            --accent-color: #FFB5A7;    /* 珊瑚粉 */
+            --bg-color: #F8F9FA;        /* 浅灰白 */
+            --control-bg: rgba(255, 255, 255, 0.95);
         }
 
         * {
@@ -22,8 +22,8 @@
         }
 
         body {
-            background: linear-gradient(135deg, #0A1931 0%, #1A1A2E 100%);
-            color: #E6EDF3;
+            background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+            color: #495057;
             line-height: 1.8;
             overflow-x: hidden;
             text-rendering: optimizeLegibility;
@@ -35,7 +35,7 @@
             width: 100%;
             height: 100%;
             z-index: 0;
-            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+            background: linear-gradient(135deg, #E3F2FD 0%, #F3F4F6 100%);
         }
 
         .container {
@@ -62,7 +62,6 @@
             font-weight: 500;
             letter-spacing: 1px;
             position: relative;
-            text-shadow: 0 0 15px rgba(177, 156, 217, 0.4);
         }
 
         h1::after {
@@ -92,23 +91,23 @@
                 var(--primary-color) 0%, 
                 var(--accent-color) 100%);
             transform: translateX(-50%);
-            box-shadow: 0 0 20px rgba(177, 156, 217, 0.3);
         }
 
         .event {
             position: relative;
             width: 46%;
             padding: 25px;
-            margin-bottom: 80px;
-            background: rgba(17, 25, 40, 0.9);
+            margin-bottom: 60px;
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 16px;
-            box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
             opacity: 0;
             transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             will-change: transform, opacity;
-            border: 1px solid rgba(177, 156, 217, 0.2);
+            border: 1px solid rgba(136, 201, 177, 0.15);
         }
+
 
         .event:nth-child(odd) {
             left: 4%;
@@ -150,6 +149,19 @@
             left: -34px;
         }
 
+                /* 保持事件卡片布局和动画... */
+
+                .event::after {
+            content: '';
+            position: absolute;
+            top: 26px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border: 3px solid var(--primary-color);
+            border-radius: 50%;
+        }
+
         .date {
             color: var(--primary-color);
             font-size: 1.1em;
@@ -160,12 +172,12 @@
         }
 
         .date::before {
-            content: '✦';
+            content: '🌸';
             margin-right: 12px;
             color: var(--accent-color);
             font-size: 1.2em;
-            text-shadow: 0 0 8px rgba(255, 183, 197, 0.4);
         }
+
 
         .content {
             color: #D1D9E6;
@@ -192,25 +204,26 @@
         }
 
         .photo-placeholder {
-            background: #131D2F;
-            padding-top: 100%;
-            border-radius: 12px;
-            position: relative;
-            overflow: hidden;
-            cursor: zoom-in;
-            transition: transform 0.3s;
-            background-size: cover;
-            background-position: center;
-            border: 2px solid rgba(177, 156, 217, 0.2);
+            background: #F1F3F5;
+            border: 1px solid rgba(136, 201, 177, 0.2);
+            background-size: cover !important;  /* 确保图片填充容器 */
+            background-position: center !important;
+        background-repeat: no-repeat !important;
+    /* 新增尺寸控制 */
+    width: 200%;
+    height: 300px;  /* 固定高度 */
+    padding-top: 0;  /* 移除原有padding-top */
+    
+    /* 添加过渡动画 */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .control-panel {
-            position: fixed;
-            bottom: 24px;
-            left: 24px;
-            display: flex;
-            gap: 16px;
-            z-index: 999;
+            /* 更新控制面板为清新风格 */
+            background: var(--control-bg);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-radius: 28px;
+            padding: 12px 20px;
         }
 
         .music-player {
@@ -314,6 +327,9 @@
             input[type="range"] {
                 width: 100px;
             }
+            .photo-placeholder {
+        height: 200px;
+    }
         }
     </style>
 </head>
@@ -336,7 +352,7 @@
     <div class="container">
         <div class="header">
             <h1>我们的物语</h1>
-            <p>点击星星，点亮回忆</p>
+            <p>爱意东升西落，浪漫至死不渝</p>
         </div>
         
         <div class="timeline">
@@ -470,6 +486,19 @@
                 </div>
             </div> 
 
+            <div class="event">
+                <div class="date">2025年5月20日</div>
+                <div class="content">我们的开始</div>
+                <div class="detail">
+                    <div class="photo-container">
+                        <a href="images/5.20.jpg" data-lightbox="memories" data-title="start">
+                            <div class="photo-placeholder" style="background-image: url(images/5.20.jpg)"></div>
+                        </a>
+                    </div>
+                    <p class="story">今天是值得纪念的日子，当我们坐在思源的长凳，我不可抑制的有些颤抖，当你轻声说好的时候，我觉得世界最大的幸福莫过于此了</p>
+                </div>
+            </div> 
+
         </div>
     </div>
 
@@ -479,28 +508,18 @@
         document.addEventListener('DOMContentLoaded', () => {
             // 星空粒子效果
             particlesJS('particles-js', {
-                particles: {
-                    number: { value: 200 },
-                    color: { value: '#FFFFFF' },
-                    size: { value: 2, random: true },
-                    move: {
-                        enable: true,
-                        speed: 0.3,
-                        direction: "none",
-                        out_mode: "out"
-                    }
-                },
-                interactivity: {
-                    events: {
-                        onhover: {
-                            enable: true,
-                            mode: "bubble",
-                            parallax: { enable: false }
-                        }
-                    }
+            particles: {
+                number: { value: 80 },
+                color: { value: '#A5D6A7' },
+                size: { value: 3, random: true },
+                move: {
+                    enable: true,
+                    speed: 0.5,
+                    direction: "none",
+                    out_mode: "out"
                 }
-            });
-
+            }
+        });
             // 卡片动画
             const events = document.querySelectorAll('.event');
             const checkScroll = () => {
